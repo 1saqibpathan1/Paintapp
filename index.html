@@ -1,48 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paint Web App</title>
-    <style>
-        body { text-align: center; }
-        canvas { border: 2px solid black; }
-        video { display: none; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paint Web App with Camera Feed</title>
+  <style>
+    body { text-align: center; }
+    #container {
+      position: relative;
+      display: inline-block;
+    }
+    video, canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      /* Transparent background */
+      background-color: transparent;
+    }
+  </style>
 </head>
 <body>
-    <h1>Paint Web App with Camera Feed</h1>
+  <h1>Paint Web App with Camera Feed</h1>
+  <div id="container">
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
-    <br>
-    <button onclick="clearCanvas()">Clear</button>
-    <button onclick="changeColor('red')">Red</button>
-    <button onclick="changeColor('blue')">Blue</button>
-    <button onclick="changeColor('green')">Green</button>
-    <script src="script.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paint Web App</title>
-    <style>
-        body { text-align: center; }
-        canvas { border: 2px solid black; }
-        video { display: none; }
-    </style>
-</head>
-<body>
-    <h1>Paint Web App with Camera Feed</h1>
-    <video id="video" autoplay></video>
-    <canvas id="canvas"></canvas>
-    <br>
-    <button onclick="clearCanvas()">Clear</button>
-    <button onclick="changeColor('red')">Red</button>
-    <button onclick="changeColor('blue')">Blue</button>
-    <button onclick="changeColor('green')">Green</button>
-    <script src="script.js"></script>
+  </div>
+  <br>
+  <button onclick="clearCanvas()">Clear</button>
+  <button onclick="changeColor('red')">Red</button>
+  <button onclick="changeColor('blue')">Blue</button>
+  <button onclick="changeColor('green')">Green</button>
+  <script src="script.js"></script>
 </body>
 </html>
