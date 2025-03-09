@@ -12,23 +12,50 @@ navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
 });
 
 // Once the video metadata is loaded, adjust canvas size to match the video dimensions
-video.addEventListener('loadedmetadata', () => {
+video.addEventListener("loadedmetadata", () => {
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   container.style.width = video.videoWidth + "px";
   container.style.height = video.videoHeight + "px";
 });
 
-// Drawing functions on the transparent canvas
-canvas.addEventListener("mousedown", () => drawing = true);
-canvas.addEventListener("mouseup", () => drawing = false);
+// Mouse events for desktop
+canvas.addEventListener("mousedown", () => (drawing = true));
+canvas.addEventListener("mouseup", () => (drawing = false));
 canvas.addEventListener("mousemove", draw);
+
+// Touch events for mobile
+canvas.addEventListener("touchstart", (e) => {
+  drawing = true;
+  draw(e);
+  e.preventDefault();
+});
+canvas.addEventListener("touchend", (e) => {
+  drawing = false;
+  e.preventDefault();
+});
+canvas.addEventListener("touchmove", (e) => {
+  draw(e);
+  e.preventDefault();
+});
 
 function draw(event) {
   if (!drawing) return;
+  
+  let x, y;
+  // Check if this is a touch event
+  if (event.touches) {
+    x = event.touches[0].clientX;
+    y = event.touches[0].clientY;
+  } else {
+    x = event.clientX;
+    y = event.clientY;
+  }
+  
+  // Adjust for canvas position
   const rect = canvas.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
+  x = x - rect.left;
+  y = y - rect.top;
   
   ctx.fillStyle = color;
   ctx.beginPath();
