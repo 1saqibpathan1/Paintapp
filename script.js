@@ -4,6 +4,7 @@ const container = document.getElementById("container");
 const ctx = canvas.getContext("2d");
 let drawing = false;
 let color = "red";
+let lastX, lastY;
 
 // Get camera feed
 navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
@@ -19,19 +20,42 @@ video.addEventListener("loadedmetadata", () => {
   container.style.height = video.videoHeight + "px";
 });
 
+// Utility function to get coordinates relative to canvas
+function getCoords(event) {
+  let x, y;
+  if (event.touches) {
+    x = event.touches[0].clientX;
+    y = event.touches[0].clientY;
+  } else {
+    x = event.clientX;
+    y = event.clientY;
+  }
+  const rect = canvas.getBoundingClientRect();
+  return [x - rect.left, y - rect.top];
+}
+
 // Mouse events for desktop
-canvas.addEventListener("mousedown", () => (drawing = true));
-canvas.addEventListener("mouseup", () => (drawing = false));
+canvas.addEventListener("mousedown", (e) => {
+  drawing = true;
+  [lastX, lastY] = getCoords(e);
+});
+canvas.addEventListener("mouseup", () => {
+  drawing = false;
+  lastX = undefined;
+  lastY = undefined;
+});
 canvas.addEventListener("mousemove", draw);
 
 // Touch events for mobile
 canvas.addEventListener("touchstart", (e) => {
   drawing = true;
-  draw(e);
+  [lastX, lastY] = getCoords(e);
   e.preventDefault();
 });
 canvas.addEventListener("touchend", (e) => {
   drawing = false;
+  lastX = undefined;
+  lastY = undefined;
   e.preventDefault();
 });
 canvas.addEventListener("touchmove", (e) => {
@@ -41,26 +65,19 @@ canvas.addEventListener("touchmove", (e) => {
 
 function draw(event) {
   if (!drawing) return;
+  const [x, y] = getCoords(event);
   
-  let x, y;
-  // Check if this is a touch event
-  if (event.touches) {
-    x = event.touches[0].clientX;
-    y = event.touches[0].clientY;
-  } else {
-    x = event.clientX;
-    y = event.clientY;
-  }
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 5;
+  ctx.lineCap = "round";
   
-  // Adjust for canvas position
-  const rect = canvas.getBoundingClientRect();
-  x = x - rect.left;
-  y = y - rect.top;
-  
-  ctx.fillStyle = color;
   ctx.beginPath();
-  ctx.arc(x, y, 5, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.moveTo(lastX, lastY);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  
+  // Update the last coordinates
+  [lastX, lastY] = [x, y];
 }
 
 function changeColor(newColor) {
