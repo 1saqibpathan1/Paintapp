@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Paint Web App with Camera Feed</title>
   <style>
-    body { text-align: center; }
+    body {
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
     #container {
       position: relative;
       display: inline-block;
@@ -19,8 +24,8 @@
       position: absolute;
       top: 0;
       left: 0;
-      /* Transparent background */
       background-color: transparent;
+      touch-action: none; /* Disable default touch scrolling */
     }
   </style>
 </head>
@@ -30,7 +35,7 @@
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
   </div>
-  <br>
+  <br />
   <button onclick="clearCanvas()">Clear</button>
   <button onclick="changeColor('red')">Red</button>
   <button onclick="changeColor('blue')">Blue</button>
